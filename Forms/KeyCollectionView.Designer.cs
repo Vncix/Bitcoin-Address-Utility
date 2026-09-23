@@ -67,6 +67,8 @@
             this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.saveAddressListWithPrivKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportPlainTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportPlainTextHexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -251,6 +253,8 @@
             this.toolStripSeparator2,
             this.saveAddressListToolStripMenuItem,
             this.saveAddressListWithPrivKeyToolStripMenuItem,
+            this.exportPlainTextToolStripMenuItem,
+            this.exportPlainTextHexToolStripMenuItem,
             this.toolStripSeparator3,
             this.deleteSelectedItemsToolStripMenuItem});
             this.selectionToolStripMenuItem.Name = "selectionToolStripMenuItem";
@@ -399,7 +403,21 @@
             this.saveAddressListWithPrivKeyToolStripMenuItem.Size = new System.Drawing.Size(315, 24);
             this.saveAddressListWithPrivKeyToolStripMenuItem.Text = "Save Address List with PrivKey";
             this.saveAddressListWithPrivKeyToolStripMenuItem.Click += new System.EventHandler(this.saveAddressListWithPrivKeyToolStripMenuItem_Click);
-            // 
+            //
+            // exportPlainTextToolStripMenuItem
+            //
+            this.exportPlainTextToolStripMenuItem.Name = "exportPlainTextToolStripMenuItem";
+            this.exportPlainTextToolStripMenuItem.Size = new System.Drawing.Size(315, 24);
+            this.exportPlainTextToolStripMenuItem.Text = "Export Address,WIF (CSV)";
+            this.exportPlainTextToolStripMenuItem.Click += new System.EventHandler(this.exportPlainTextToolStripMenuItem_Click);
+            //
+            // exportPlainTextHexToolStripMenuItem
+            //
+            this.exportPlainTextHexToolStripMenuItem.Name = "exportPlainTextHexToolStripMenuItem";
+            this.exportPlainTextHexToolStripMenuItem.Size = new System.Drawing.Size(315, 24);
+            this.exportPlainTextHexToolStripMenuItem.Text = "Export Address,WIF,Hex (CSV)";
+            this.exportPlainTextHexToolStripMenuItem.Click += new System.EventHandler(this.exportPlainTextHexToolStripMenuItem_Click);
+            //
             // KeyCollectionView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -467,5 +485,7 @@
         private System.Windows.Forms.ToolStripMenuItem escrowToolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem printPhysicalBitcoinInsertsDenseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAddressListWithPrivKeyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportPlainTextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportPlainTextHexToolStripMenuItem;
     }
 }

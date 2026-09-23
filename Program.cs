@@ -23,6 +23,8 @@ using System.Windows.Forms;
 namespace BtcAddress {
     static class Program {
 
+        public static BtcAddress.Forms.KeyCollectionView MainWindow = null;
+
         public static Form1 AddressUtility = null;
 
         public static Base58Calc Base58Calc = null;
@@ -92,7 +94,8 @@ namespace BtcAddress {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             
-            Application.Run(new BtcAddress.Forms.KeyCollectionView());
+            MainWindow = new BtcAddress.Forms.KeyCollectionView();
+            Application.Run(MainWindow);
         }
     }
 }

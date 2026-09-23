@@ -31,6 +31,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Math.EC;
 using ThoughtWorks.QRCode.Codec;
@@ -44,6 +45,7 @@ namespace BtcAddress {
     public partial class Form1 : Form {
         public Form1() {
             InitializeComponent();
+            btnBlockExplorer.Visible = false;
         }
 
         /// <summary>
@@ -313,7 +315,9 @@ namespace BtcAddress {
                 SetText(txtPrivHex, kp.PrivateKeyHex);
                 SetText(txtPubHex, kp.PublicKeyHex);
                 SetText(txtPubHash, kp.Hash160Hex);
-                SetText(txtBtcAddr, new AddressBase(kp, AddressTypeByte).AddressBase58);              
+                SetText(txtBtcAddr, new AddressBase(kp, AddressTypeByte).AddressBase58);
+
+                Program.MainWindow.KeyCollection.AddItem(new KeyCollectionItem(kp));
 
             } finally {
                 ChangeFlag--;
@@ -322,18 +326,8 @@ namespace BtcAddress {
         }
 
         private void btnBlockExplorer_Click(object sender, EventArgs e) {
-            try {
-                if (cboCoinType.Text == "Testnet") {
-                    Process.Start("http://www.blockexplorer.com/testnet/address/" + txtBtcAddr.Text);
-                } else if (cboCoinType.Text == "Namecoin") {
-                    Process.Start("http://explorer.dot-bit.org/a/" + txtBtcAddr.Text);
-                } else if (cboCoinType.Text == "Litecoin") {
-                    Process.Start("http://explorer.litecoin.net/address/" + txtBtcAddr.Text);
-                } else {
-                    Process.Start("http://www.blockchain.info/address/" + txtBtcAddr.Text);
-                }
-            } catch { }
-            
+            // Removed: the hardcoded block-explorer URLs (blockexplorer.com, dot-bit.org,
+            // explorer.litecoin.net, blockchain.info/address) are from ~2013 and dead/wrong today.
         }
 
         private void CorrectBitcoinAddress() {
@@ -387,7 +381,9 @@ namespace BtcAddress {
                 SetText(txtPubHex, mkp.PublicKeyHex);
                 SetText(txtPubHash, mkp.Hash160Hex);
                 SetText(txtBtcAddr, new AddressBase(mkp, AddressTypeByte).AddressBase58);
-                
+
+                Program.MainWindow.KeyCollection.AddItem(new KeyCollectionItem(mkp));
+
             } finally {
                 ChangeFlag--;
             }
@@ -513,7 +509,10 @@ namespace BtcAddress {
             string shacode = "";
 
 
-            SecureRandom sr = new SecureRandom();
+            // SECURITY NOTE: this method (GenerateAddresses) has no callers anywhere in the
+            // codebase -- confirmed dead code. Fixed anyway for defense-in-depth, in case it's
+            // ever wired back up. See SECURITY.md.
+            SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
             int dec = 0;
 
             List<string> myaddresses = new List<string>();

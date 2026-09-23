@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Crypto.Prng;
 using System.Security.Cryptography;
 using System.Drawing.Printing;
 using System.IO;
@@ -59,10 +60,14 @@ namespace BtcAddress {
             }
         }
 
+        // SECURITY NOTE (see SECURITY.md): seeded via CryptoApiRandomGenerator (the OS CSPRNG),
+        // not the default parameterless SecureRandom(). This string becomes the default
+        // passphrase for "Deterministic Wallet" generation, so it's as security-sensitive as
+        // key generation itself. Do not revert to `new SecureRandom()` here.
         private string GetUglyRandomString() {
             StringBuilder sb = new StringBuilder(128);
+            SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
             for (int i = 0; i < 64; i++) {
-                SecureRandom sr = new SecureRandom();
                 int idx = sr.Next(0, 61);
                 sb.Append("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".Substring(idx, 1));
             }

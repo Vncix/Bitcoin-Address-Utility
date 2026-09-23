@@ -58,6 +58,22 @@ All of the following used the real, unmodified compiled code (via reflection ove
 
 `CryptoApiRandomGenerator` wraps `System.Security.Cryptography.RNGCryptoServiceProvider` (the Windows CSPRNG). This removes the dependency on `Ticks`/CPU-jitter timing entirely for the actual random bytes; the deterministic-collision mechanism documented above no longer applies to a build of this fork.
 
+### Follow-up: the first pass didn't cover every call site
+
+A later review of this same fork searched the whole codebase for every `new SecureRandom()` instantiation, not just the three obvious `KeyPair`-family ones above, and found **four more reachable, key-material-determining call sites still using the unpatched constructor**:
+
+| File / method | What the randomness determines |
+|---|---|
+| `Forms/PaperWalletPrinter.cs` — `GetUglyRandomString()` | The default passphrase for "Deterministic Wallet" generation — as security-sensitive as key generation itself, since the passphrase *is* the seed. |
+| `Model/Bip38KeyPair.cs` — `Bip38KeyPair(Bip38Intermediate, ...)` constructor | `seedb`, which becomes `factorb`, multiplied directly into the final private key for two-factor / vanity-address generation. |
+| `Model/EscrowCode.cs` — `EscrowCodeSet()` constructor | `x` and `y`, which directly become the private key material for an escrow pair. |
+| `Model/EscrowCode.cs` — factor-recombination method | `z`, multiplied directly into the resulting key material. |
+| `Model/MofN.cs` — `MofN.Generate()` | The coefficients that determine (or, if no key is supplied, select) the split private key for the M-of-N Calculator. |
+
+All five got the identical `CryptoApiRandomGenerator` fix, with an inline comment at each site. A sixth spot, `Form1.GenerateAddresses()`, uses the same weak pattern but has no callers anywhere in the codebase (confirmed dead code) — fixed anyway, for defense-in-depth, in case it's ever wired back up.
+
+**Takeaway:** when patching an entropy source in a codebase like this, grep for every instantiation of the RNG type itself, not just the call sites you already know about. The original patch reasoned from "where does the app generate a Bitcoin key" and correctly covered the 3 answers to that question, but missed places where the same weak constructor was used to generate *other* private-key-determining secrets (escrow factors, M-of-N shares, two-factor seed material) that don't show up if you're specifically searching for "key generation" as a UI feature.
+
 ## Is it safe to use now?
 
 **With this fork's fix applied, and built/run yourself from source: yes**, for the specific weakness documented here — key generation now draws from the OS CSPRNG rather than a timing-based seed. This is the same category of source used by essentially every modern cryptographic library on Windows.

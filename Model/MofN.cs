@@ -27,6 +27,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Math.EC;
 using Org.BouncyCastle.Math;
@@ -129,7 +130,10 @@ namespace Casascius.Bitcoin {
             KeyParts.Clear();
             decodedKeyParts.Clear();
 
-            SecureRandom sr = new SecureRandom();
+            // SECURITY NOTE (see SECURITY.md): these coefficients directly determine (or, if
+            // desiredPrivKey is null, select) the split private key. Seeded via
+            // CryptoApiRandomGenerator (the OS CSPRNG). Do not revert to `new SecureRandom()`.
+            SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
 
             // Get 8 random big integers into v[i].
             byte[][] vvv = new byte[8][];

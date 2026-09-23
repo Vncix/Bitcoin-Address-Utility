@@ -27,6 +27,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Math.EC;
 using Org.BouncyCastle.Math;
@@ -315,8 +316,11 @@ namespace Casascius.Bitcoin {
         public Bip38KeyPair(Bip38Intermediate intermediate, bool retainPrivateKeyWhenPossible=false) {
 
             // generate seedb
+            // SECURITY NOTE (see SECURITY.md): seedb directly determines factorb, which is
+            // multiplied into the final private key. Seeded via CryptoApiRandomGenerator (the
+            // OS CSPRNG). Do not revert to `new SecureRandom()` here.
             byte[] seedb = new byte[24];
-            SecureRandom sr = new SecureRandom();
+            SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
             sr.NextBytes(seedb);
 
             // get factorb as sha256(sha256(seedb))

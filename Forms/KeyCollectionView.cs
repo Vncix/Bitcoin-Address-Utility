@@ -383,6 +383,63 @@ namespace BtcAddress.Forms {
             }
         }
 
+        private void exportPlainTextToolStripMenuItem_Click(object sender, EventArgs e) {
+            List<KeyCollectionItem> selected = new List<KeyCollectionItem>();
+            foreach (ListViewItem lvi in listView1.Items) {
+                if (lvi.Checked) selected.Add(lvi.Tag as KeyCollectionItem);
+            }
+            if (selected.Count == 0) {
+                MessageBox.Show("No items are selected", "Empty selection",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try {
+                saveFileDialog1.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+                if (DialogResult.OK == saveFileDialog1.ShowDialog()) {
+                    if (saveFileDialog1.FileName != "") {
+                        using (StreamWriter w = File.CreateText(saveFileDialog1.FileName)) {
+                            foreach (var k in selected) {
+                                w.WriteLine(k.GetAddressBase58() + "," + k.PrivateKey);
+                            }
+                            w.Close();
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message, "Failed to save file", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void exportPlainTextHexToolStripMenuItem_Click(object sender, EventArgs e) {
+            List<KeyCollectionItem> selected = new List<KeyCollectionItem>();
+            foreach (ListViewItem lvi in listView1.Items) {
+                if (lvi.Checked) selected.Add(lvi.Tag as KeyCollectionItem);
+            }
+            if (selected.Count == 0) {
+                MessageBox.Show("No items are selected", "Empty selection",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try {
+                saveFileDialog1.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+                if (DialogResult.OK == saveFileDialog1.ShowDialog()) {
+                    if (saveFileDialog1.FileName != "") {
+                        using (StreamWriter w = File.CreateText(saveFileDialog1.FileName)) {
+                            foreach (var k in selected) {
+                                string hex = (k.Address != null && k.Address is KeyPair) ? ((KeyPair)k.Address).PrivateKeyHex.Replace(" ", "") : "";
+                                w.WriteLine(k.GetAddressBase58() + "," + k.PrivateKey + "," + hex);
+                            }
+                            w.Close();
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message, "Failed to save file", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
 
 
 

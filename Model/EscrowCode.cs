@@ -25,6 +25,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Math.EC;
@@ -83,7 +84,10 @@ namespace Casascius.Bitcoin {
         /// Default constructor.  Creates a new matched pair of escrow invitation codes.
         /// </summary>
         public EscrowCodeSet() {
-            SecureRandom sr = new SecureRandom();
+            // SECURITY NOTE (see SECURITY.md): x and y directly become the private key material
+            // for this escrow pair. Seeded via CryptoApiRandomGenerator (the OS CSPRNG). Do not
+            // revert to `new SecureRandom()` here.
+            SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
 
             byte[] x = new byte[32];
             byte[] y = new byte[32];
@@ -169,8 +173,11 @@ namespace Casascius.Bitcoin {
 
 
             // produce a new factor
+            // SECURITY NOTE (see SECURITY.md): z is multiplied directly into the resulting
+            // point/private key material below. Seeded via CryptoApiRandomGenerator (the OS
+            // CSPRNG). Do not revert to `new SecureRandom()` here.
             byte[] z = new byte[32];
-            SecureRandom sr = new SecureRandom();
+            SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
             sr.NextBytes(z);
 
             // calculate Gxy then Gxyz
