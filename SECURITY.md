@@ -279,6 +279,7 @@ Realistic scenarios where this applies:
 - Multiple instances/users generating addresses nearly simultaneously on the same shared
   physical host or VM.
 - Cloned/snapshotted VMs that boot into a very similar clock and CPU-load state.
+- **No single-instance guard**: `Program.cs`'s `Main()` calls `Application.Run(new KeyCollectionView())` directly, with no mutex or "already running" check. A user can trivially launch two copies of the app at once — deliberately, for batch work, or just by double-clicking the `.exe` twice — and each is a fresh OS process with its own from-scratch `SecureRandom` seeding sequence, which is exactly the condition the organic-collision measurements above are about. This is the simplest concrete trigger for the vulnerability: no VM, scripting, or adversarial setup required.
 
 ### Measured degradation under CPU contention (resource-constrained VM)
 
