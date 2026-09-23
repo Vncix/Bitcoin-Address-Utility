@@ -52,6 +52,22 @@ changed to `new SecureRandom(new CryptoApiRandomGenerator())`:
   or pointing to the wrong service today) and hid the now-inert button
   (`btnBlockExplorer.Visible = false` in the constructor).
 
+## Documentation and reproducible evidence
+
+- **`SECURITY.md`** was substantially expanded with the full root-cause analysis (IL-level
+  disassembly of `SecureRandom`'s seeding chain, `ThreadedSeedGenerator`'s jitter mechanism,
+  the static-shared-generator finding, measured `DateTime.Ticks` resolution, the
+  deterministic same-seed-same-key proof of concept, and measured seeding-time degradation
+  under CPU contention), and the previously-undocumented finding that
+  `Model/ExtraEntropy.cs`'s only entropy hook is a `MouseMove` handler with no `KeyDown`
+  equivalent — so keyboard-only navigation to "New address" adds effectively zero
+  supplementary entropy.
+- **`research/`** — added the proof-of-concept source (C# and Python, both operating on the
+  real compiled DLLs via reflection, not a reimplementation) referenced by `SECURITY.md`,
+  plus small (10-row) samples of the raw evidence data. The full evidence CSVs (7,000 and 550
+  rows) are not committed, since every row is a real, validly-generated private key/WIF —
+  the tooling to regenerate fresh ones is included instead. See `research/README.md`.
+
 ## Not changed
 
 Everything else — UI layout, encoding/decoding logic, BIP38 encryption math, printing/report
