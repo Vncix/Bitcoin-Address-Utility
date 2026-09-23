@@ -84,7 +84,9 @@
             this.menuStrip1.Size = new System.Drawing.Size(629, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
-            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
+            // NOTE: a dangling subscription to a non-existent `menuStrip1_ItemClicked` handler
+            // was removed here (upstream designer/code-behind drift, unrelated to this fork's
+            // security fixes) -- it prevented the project from compiling at all.
             this.menuStrip1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.menuStrip1_MouseMove);
             // 
             // toolsToolStripMenuItem

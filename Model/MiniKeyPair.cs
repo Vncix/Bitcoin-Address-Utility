@@ -26,6 +26,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Math.EC;
 
@@ -90,7 +91,9 @@ namespace Casascius.Bitcoin {
         public static MiniKeyPair CreateRandom(string usersalt) {
             if (usersalt == null) usersalt = "ok, whatever";
             usersalt += DateTime.UtcNow.Ticks.ToString();
-            SecureRandom sr = new SecureRandom();
+            // SECURITY NOTE (see SECURITY.md): seeded via CryptoApiRandomGenerator (OS CSPRNG).
+            // Do not revert to the parameterless `new SecureRandom()`.
+            SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
             char[] chars = new char[64];
             for (int i = 0; i < 64; i++) {
                 chars[i] = (char)(32 + (sr.NextInt() % 64));

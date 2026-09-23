@@ -22,15 +22,20 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Math.EC;
 using Org.BouncyCastle.Math;
 using CryptSharp.Utility;
+// Disambiguates against System.Security.Cryptography.ECPoint, added in .NET Framework 4.6.2
+// (this codebase predates that type and always meant the BouncyCastle one).
+using ECPoint = Org.BouncyCastle.Math.EC.ECPoint;
 
 namespace Casascius.Bitcoin {
 
@@ -58,15 +63,22 @@ namespace Casascius.Bitcoin {
         /// <summary>
         /// Creates a new random key pair, using a user-provided string to add entropy to the
         /// SecureRandom generator provided by the .NET Framework.
+        ///
+        /// SECURITY NOTE (see SECURITY.md): seeded via CryptoApiRandomGenerator, which wraps
+        /// the operating system's CSPRNG (RNGCryptoServiceProvider). BouncyCastle's default
+        /// parameterless SecureRandom() never touches the OS CSPRNG -- it seeds only from
+        /// DateTime.Ticks (~6ms real resolution on Windows) and CPU scheduling jitter, which
+        /// this fork's security analysis found collides organically between independent
+        /// process launches. Do not revert to `new SecureRandom()` here.
         /// </summary>
         public static KeyPair Create(string usersalt, bool compressed=false, byte addressType = 0) {
             if (usersalt == null) usersalt = "ok, whatever";
             usersalt += DateTime.UtcNow.Ticks.ToString();
 
-            SecureRandom sr = new SecureRandom();
+            SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
 
             byte[] poop = Util.ComputeSha256(usersalt + nonce.ToString());
-            nonce++;
+            Interlocked.Increment(ref nonce);
 
             byte[] newkey = new byte[32];
 

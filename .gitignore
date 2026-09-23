@@ -1,0 +1,6 @@
+bin/
+obj/
+*.suo
+*.user
+BouncyCastle.Crypto.dll
+ThoughtWorks.QRCode.dll

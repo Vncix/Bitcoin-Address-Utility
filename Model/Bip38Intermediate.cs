@@ -28,6 +28,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Math.EC;
 using CryptSharp.Utility;
@@ -90,7 +91,9 @@ namespace Casascius.Bitcoin {
                 _ownerentropy = new byte[8];
 
                 // Get 8 random bytes to use as salt
-                SecureRandom sr = new SecureRandom();
+                // SECURITY NOTE (see SECURITY.md): seeded via CryptoApiRandomGenerator (OS CSPRNG).
+                // Do not revert to the parameterless `new SecureRandom()`.
+                SecureRandom sr = new SecureRandom(new CryptoApiRandomGenerator());
                 sr.NextBytes(_ownerentropy);
 				// set lot number between 100000 and 999999, and sequence number to 1
 				long x = (sr.NextLong () % 900000L + 100000L) * 4096L + (long)startingSequenceNumber;

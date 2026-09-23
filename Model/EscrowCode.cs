@@ -28,6 +28,9 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Math.EC;
+// Disambiguates against System.Security.Cryptography.ECPoint, added in .NET Framework 4.6.2
+// (this codebase predates that type and always meant the BouncyCastle one).
+using ECPoint = Org.BouncyCastle.Math.EC.ECPoint;
 
 namespace Casascius.Bitcoin {
     public class EscrowCodeSet {
