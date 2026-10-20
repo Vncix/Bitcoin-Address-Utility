@@ -68,7 +68,8 @@ changed to `new SecureRandom(new CryptoApiRandomGenerator())`:
   `ThoughtWorks.QRCode.dll` are now also embedded in the exe as resources (only if present at
   build time) and loaded through an `AssemblyResolve` handler in `Program`'s static
   constructor when they aren't found next to the exe. The resulting `BtcAddress.exe` runs
-  with no other files. The DLLs are still required in the project root to build.
+  with no other files. The two DLLs are now committed to the repo root (and no longer
+  listed in `.gitignore`) so the project builds out of the box.
 
 ## Documentation and reproducible evidence
 
