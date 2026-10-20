@@ -50,6 +50,10 @@ namespace BtcAddress.Forms {
 
         private bool RetainPassphrase = false;
 
+        private bool DeterministicCompressed = false;
+
+        private bool DeterministicKeepSeed = false;
+
         private string UserText;
 
         private int RemainingToGenerate = 0;
@@ -80,6 +84,8 @@ namespace BtcAddress.Forms {
             }
             chkRetainPrivKey.Visible = (rdoEncrypted.Checked);
             chkRetainPassphrase.Visible = (rdoEncrypted.Checked);
+            chkDeterministicCompressed.Visible = (rdoDeterministicWallet.Checked);
+            chkDeterministicKeepSeed.Visible = (rdoDeterministicWallet.Checked);
         }
 
         private void AddressGen_FormClosing(object sender, FormClosingEventArgs e) {
@@ -142,6 +148,8 @@ namespace BtcAddress.Forms {
             UserText = txtTextInput.Text;
             RetainPrivateKeys = chkRetainPrivKey.Checked;
             RetainPassphrase = chkRetainPassphrase.Checked && rdoEncrypted.Checked;
+            DeterministicCompressed = chkDeterministicCompressed.Checked && rdoDeterministicWallet.Checked;
+            DeterministicKeepSeed = chkDeterministicKeepSeed.Checked && rdoDeterministicWallet.Checked;
 
             if (rdoDeterministicWallet.Checked) GenChoice = GenChoices.Deterministic;
             if (rdoEncrypted.Checked) {
@@ -210,10 +218,13 @@ namespace BtcAddress.Forms {
                         newitem = new KeyCollectionItem(kp);
                         break;
                     case GenChoices.Deterministic:
-                        kp = KeyPair.CreateFromString(UserText + detcount);
+                        string hashedString = UserText + detcount;
+                        kp = KeyPair.CreateFromString(hashedString, DeterministicCompressed);
                         detcount++;
                         s = kp.AddressBase58;
                         newitem = new KeyCollectionItem(kp);
+                        // the exact string that was hashed (seed + sequence number), enough to re-derive this key
+                        if (DeterministicKeepSeed) newitem.RetainedPassphrase = hashedString;
                         break;
                     case GenChoices.Encrypted:
                         Bip38KeyPair ekp = new Bip38KeyPair(intermediate, RetainPrivateKeys);

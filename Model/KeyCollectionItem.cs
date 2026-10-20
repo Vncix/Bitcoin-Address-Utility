@@ -42,9 +42,10 @@ namespace Casascius.Bitcoin {
         public AddressBase Address;
 
         /// <summary>
-        /// The BIP38 passphrase, kept in plain text only if the user explicitly asked to retain
-        /// it for export ("Keep passphrase for export" in the Generate Addresses window).
-        /// Null otherwise.
+        /// A secret kept in plain text only if the user explicitly asked to retain it for export in
+        /// the Generate Addresses window: the BIP38 passphrase ("Keep passphrase for export"), or
+        /// for deterministic keys the exact string that was hashed, seed + sequence number
+        /// ("Keep seed for export").  Null otherwise.
         /// </summary>
         public string RetainedPassphrase;
 

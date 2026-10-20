@@ -50,14 +50,14 @@ namespace Casascius.Bitcoin {
         /// <summary>
         /// Creates a new key pair using the SHA256 hash of a given string as the private key.
         /// </summary>
-        public static KeyPair CreateFromString(string tohash) {            
+        public static KeyPair CreateFromString(string tohash, bool compressed = false) {
             UTF8Encoding utf8 = new UTF8Encoding(false);
             byte[] forsha = utf8.GetBytes(tohash);
             Sha256Digest sha256 = new Sha256Digest();
             sha256.BlockUpdate(forsha, 0, forsha.Length);
             byte[] thehash = new byte[32];
             sha256.DoFinal(thehash, 0);
-            return new KeyPair(thehash);
+            return new KeyPair(thehash, compressed: compressed);
         }
 
         /// <summary>

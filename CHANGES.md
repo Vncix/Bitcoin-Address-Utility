@@ -87,6 +87,14 @@ changed to `new SecureRandom(new CryptoApiRandomGenerator())`:
   **not** changed, to keep their original formats: mini keys and BIP38 / passphrase-encrypted
   keys (still uncompressed), and deterministic keys (changing them would change the addresses
   they reproduce).
+- **`Forms/AddressGen.cs` / `.Designer.cs` / `Model/KeyPair.cs`** — in *Generate addresses →
+  Deterministic (WIF)*: a **Compressed public keys** checkbox (off by default, so existing
+  seeds keep reproducing the same addresses; the private key is identical either way, only the
+  address and WIF change) and a **Keep seed for export** checkbox, which stores the exact string
+  that was hashed (seed + sequence number) and writes it as the extra last column of both CSV
+  exports, like the BIP38 "Keep passphrase for export". `KeyPair.CreateFromString` got an
+  optional `compressed` parameter (default false = unchanged behaviour). The seed is written in
+  plain text — protect those files.
 - **`Model/Bitcoin.cs`** — fixed `HexStringToBytes` for hex with an odd number of digits. The
   lone digit used to be attached to the *end* ("ABC" decoded as `AB 0C`), so a private key
   printed without its leading zero digit (63 digits instead of 64) silently decoded to a

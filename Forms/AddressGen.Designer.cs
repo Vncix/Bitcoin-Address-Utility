@@ -41,6 +41,8 @@
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.chkRetainPrivKey = new System.Windows.Forms.CheckBox();
             this.chkRetainPassphrase = new System.Windows.Forms.CheckBox();
+            this.chkDeterministicCompressed = new System.Windows.Forms.CheckBox();
+            this.chkDeterministicKeepSeed = new System.Windows.Forms.CheckBox();
             this.rdoTwoFactor = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.numGenCount)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -217,6 +219,28 @@
             this.chkRetainPassphrase.UseVisualStyleBackColor = true;
             this.chkRetainPassphrase.Visible = false;
             //
+            // chkDeterministicCompressed
+            //
+            this.chkDeterministicCompressed.AutoSize = true;
+            this.chkDeterministicCompressed.Location = new System.Drawing.Point(8, 102);
+            this.chkDeterministicCompressed.Name = "chkDeterministicCompressed";
+            this.chkDeterministicCompressed.Size = new System.Drawing.Size(150, 17);
+            this.chkDeterministicCompressed.TabIndex = 16;
+            this.chkDeterministicCompressed.Text = "Compressed public keys";
+            this.chkDeterministicCompressed.UseVisualStyleBackColor = true;
+            this.chkDeterministicCompressed.Visible = false;
+            //
+            // chkDeterministicKeepSeed
+            //
+            this.chkDeterministicKeepSeed.AutoSize = true;
+            this.chkDeterministicKeepSeed.Location = new System.Drawing.Point(8, 85);
+            this.chkDeterministicKeepSeed.Name = "chkDeterministicKeepSeed";
+            this.chkDeterministicKeepSeed.Size = new System.Drawing.Size(150, 17);
+            this.chkDeterministicKeepSeed.TabIndex = 17;
+            this.chkDeterministicKeepSeed.Text = "Keep seed for export";
+            this.chkDeterministicKeepSeed.UseVisualStyleBackColor = true;
+            this.chkDeterministicKeepSeed.Visible = false;
+            //
             // rdoTwoFactor
             // 
             this.rdoTwoFactor.AutoSize = true;
@@ -233,6 +257,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 254);
+            this.Controls.Add(this.chkDeterministicKeepSeed);
+            this.Controls.Add(this.chkDeterministicCompressed);
             this.Controls.Add(this.chkRetainPassphrase);
             this.Controls.Add(this.chkRetainPrivKey);
             this.Controls.Add(this.statusStrip1);
@@ -274,6 +300,8 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.CheckBox chkRetainPrivKey;
         private System.Windows.Forms.CheckBox chkRetainPassphrase;
+        private System.Windows.Forms.CheckBox chkDeterministicCompressed;
+        private System.Windows.Forms.CheckBox chkDeterministicKeepSeed;
         private System.Windows.Forms.RadioButton rdoTwoFactor;
     }
 }
