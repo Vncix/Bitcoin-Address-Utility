@@ -13,7 +13,7 @@ Dependencies (same as upstream, but included in this fork so it builds out of th
 1. `BouncyCastle.Crypto.dll` (v1.7.4114.6375, April 2011 build, from [bouncycastle.org/csharp](http://www.bouncycastle.org/csharp/)) — at the project root.
 2. `ThoughtWorks.QRCode.dll` (v1.0.2774.19990) — at the project root.
 
-Both are third-party binaries, redistributed unmodified exactly as used by this project; they remain under their own licenses, not this repo's GPLv3. The build embeds them into `BtcAddress.exe`, so the compiled exe is a single file and needs no DLLs next to it.
+Both are third-party binaries, redistributed unmodified exactly as used by this project; they remain under their own licenses, not this repo's GPLv3 — see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (BouncyCastle is MIT-style; the license of `ThoughtWorks.QRCode.dll` could not be determined). The build embeds them into `BtcAddress.exe`, so the compiled exe is a single file and needs no DLLs next to it.
 
 Then build `BtcAddress.sln` / `BtcAddress.csproj` with MSBuild or Visual Studio (targets .NET Framework 4.0). This fork also fixes an `ECPoint` name collision with a type .NET added in Framework 4.6.2, so — unlike upstream — it builds cleanly on a current .NET Framework SDK without needing an old targeting pack.
 
