@@ -41,6 +41,17 @@ namespace BtcAddress {
 
         public static BtcAddress.Forms.KeyCollectionView MainWindow = null;
 
+        /// <summary>
+        /// True (default) to generate random WIF keys with compressed public keys.  Saved per user.
+        /// </summary>
+        public static bool UseCompressedAddresses {
+            get { return BtcAddress.Properties.Settings.Default.CompressedAddresses; }
+            set {
+                BtcAddress.Properties.Settings.Default.CompressedAddresses = value;
+                try { BtcAddress.Properties.Settings.Default.Save(); } catch { }
+            }
+        }
+
         public static Form1 AddressUtility = null;
 
         public static Base58Calc Base58Calc = null;

@@ -46,6 +46,7 @@ namespace BtcAddress {
         public Form1() {
             InitializeComponent();
             btnBlockExplorer.Visible = false;
+            compressToolStripMenuItem.Checked = Program.UseCompressedAddresses;
         }
 
         /// <summary>
@@ -305,7 +306,9 @@ namespace BtcAddress {
                 lblWhyNot.Visible = false;
                 SetText(txtMinikey, "");
 
-                KeyPair kp = KeyPair.Create(ExtraEntropy.GetEntropy(), compressToolStripMenuItem.Checked);
+                // BIP38 (passphrase) keys keep their original uncompressed format.
+                bool compress = compressToolStripMenuItem.Checked && txtPassphrase.Text == "";
+                KeyPair kp = KeyPair.Create(ExtraEntropy.GetEntropy(), compress);
 
                 if (txtPassphrase.Text != "") {
                     SetText(txtPrivWIF, new Bip38KeyPair(kp, txtPassphrase.Text).EncryptedPrivateKey);
@@ -700,7 +703,8 @@ namespace BtcAddress {
 
         private void compressToolStripMenuItem_Click(object sender, EventArgs e) {
             compressToolStripMenuItem.Checked = !compressToolStripMenuItem.Checked;
-            
+            Program.UseCompressedAddresses = compressToolStripMenuItem.Checked;
+
         }
 
         private void showFieldsToolStripMenuItem_Click(object sender, EventArgs e) {

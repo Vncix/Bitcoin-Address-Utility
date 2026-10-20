@@ -225,39 +225,40 @@ namespace Casascius.Bitcoin {
         /// </summary>
         public static byte[] HexStringToBytes(string source, bool testingForValidHex=false) {
             List<byte> bytes = new List<byte>();
-            bool gotFirstChar = false;
-            byte accum = 0;
+            StringBuilder run = new StringBuilder();
 
-            foreach (char c in source.ToCharArray()) {                
+            foreach (char c in source.ToCharArray()) {
                 if (c == ' ' || c == '-' || c == ':') {
-                    // if we got a space, then accept it as the end if we have 1 character.
-                    if (gotFirstChar) {
-                        bytes.Add(accum);
-                        accum = 0;
-                        gotFirstChar = false;
-                    }
+                    FlushHexRun(run, bytes);
                 } else if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')) {
-                    // get the character's value
-                    byte v = (byte)(c - 0x30);
-                    if (c >= 'A' && c <= 'F') v = (byte)(c + 0x0a - 'A');
-                    if (c >= 'a' && c <= 'f') v = (byte)(c + 0x0a - 'a');
-
-                    if (gotFirstChar == false) {
-                        gotFirstChar = true;
-                        accum = v;
-                    } else {
-                        accum <<= 4;
-                        accum += v;
-                        bytes.Add(accum);
-                        accum = 0;
-                        gotFirstChar = false;
-                    }
+                    run.Append(c);
                 } else {
                     if (testingForValidHex) return null;
                 }
             }
-            if (gotFirstChar) bytes.Add(accum);
-            return bytes.ToArray();    
+            FlushHexRun(run, bytes);
+            return bytes.ToArray();
+        }
+
+        /// <summary>
+        /// Decodes one delimiter-free run of hex digits as a big-endian number.  A run with an odd
+        /// number of digits gets a leading zero (e.g. "ABC" is 0x0ABC, bytes 0A BC), so a number
+        /// printed without its leading zero digit still decodes to the same value.  (This used to
+        /// attach the lone digit to the END, which silently produced a different number.)
+        /// </summary>
+        private static void FlushHexRun(StringBuilder run, List<byte> bytes) {
+            if (run.Length == 0) return;
+            if ((run.Length & 1) == 1) run.Insert(0, '0');
+            for (int i = 0; i < run.Length; i += 2) {
+                bytes.Add((byte)((HexDigitValue(run[i]) << 4) | HexDigitValue(run[i + 1])));
+            }
+            run.Clear();
+        }
+
+        private static int HexDigitValue(char c) {
+            if (c >= '0' && c <= '9') return c - '0';
+            if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+            return c - 'a' + 10;
         }
 
 

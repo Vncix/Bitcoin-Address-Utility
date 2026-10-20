@@ -45,6 +45,8 @@
             this.newAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterAnAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorCompress = new System.Windows.Forms.ToolStripSeparator();
+            this.compressedAddressesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deselectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -214,7 +216,9 @@
             this.keyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newAddressToolStripMenuItem,
             this.generateKeysToolStripMenuItem,
-            this.enterAnAddressToolStripMenuItem});
+            this.enterAnAddressToolStripMenuItem,
+            this.toolStripSeparatorCompress,
+            this.compressedAddressesToolStripMenuItem});
             this.keyToolStripMenuItem.Name = "keyToolStripMenuItem";
             this.keyToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.keyToolStripMenuItem.Text = "&Address";
@@ -239,7 +243,21 @@
             this.enterAnAddressToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.enterAnAddressToolStripMenuItem.Text = "&Enter an address/key";
             this.enterAnAddressToolStripMenuItem.Click += new System.EventHandler(this.enterAnAddressToolStripMenuItem_Click);
-            // 
+            //
+            // toolStripSeparatorCompress
+            //
+            this.toolStripSeparatorCompress.Name = "toolStripSeparatorCompress";
+            this.toolStripSeparatorCompress.Size = new System.Drawing.Size(180, 6);
+            //
+            // compressedAddressesToolStripMenuItem
+            //
+            this.compressedAddressesToolStripMenuItem.CheckOnClick = true;
+            this.compressedAddressesToolStripMenuItem.Name = "compressedAddressesToolStripMenuItem";
+            this.compressedAddressesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.compressedAddressesToolStripMenuItem.Text = "Compressed addresses";
+            this.compressedAddressesToolStripMenuItem.ToolTipText = "New random WIF keys use compressed public keys (checked, default) or the older uncompressed form. Mini keys and BIP38 keys always keep their original uncompressed format.";
+            this.compressedAddressesToolStripMenuItem.Click += new System.EventHandler(this.compressedAddressesToolStripMenuItem_Click);
+            //
             // selectionToolStripMenuItem
             // 
             this.selectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -452,6 +470,8 @@
         private System.Windows.Forms.ColumnHeader chPrivateKey;
         private System.Windows.Forms.ColumnHeader chFormat;
         private System.Windows.Forms.ToolStripMenuItem keyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorCompress;
+        private System.Windows.Forms.ToolStripMenuItem compressedAddressesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newAddressToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateKeysToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectionToolStripMenuItem;

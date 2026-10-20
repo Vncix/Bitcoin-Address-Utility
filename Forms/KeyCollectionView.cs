@@ -39,13 +39,18 @@ namespace BtcAddress.Forms {
             InitializeComponent();
         }
 
+        private void compressedAddressesToolStripMenuItem_Click(object sender, EventArgs e) {
+            Program.UseCompressedAddresses = compressedAddressesToolStripMenuItem.Checked;
+        }
+
         private void newAddressToolStripMenuItem_Click(object sender, EventArgs e) {
-            KeyPair kp = KeyPair.Create(ExtraEntropy.GetEntropy());
+            KeyPair kp = KeyPair.Create(ExtraEntropy.GetEntropy(), Program.UseCompressedAddresses);
             KeyCollectionItem item = new KeyCollectionItem(kp);
             KeyCollection.AddItem(item);
         }
 
         private void KeyCollectionView_Load(object sender, EventArgs e) {
+            compressedAddressesToolStripMenuItem.Checked = Program.UseCompressedAddresses;
             listView1.Columns[0].Width = 340;
             listView1.Columns[1].Width = 100;
             toolStripStatusLabel1.Text = "Click Address to generate some addresses.";

@@ -85,7 +85,12 @@ namespace Casascius.Bitcoin {
                         ? (((PublicKey)Address).IsCompressedPoint ? "Compressed" : "Uncompressed")
                         : "Address only";
                 } else if (EncryptedKeyPair != null) {
-                    kind = EncryptedKeyPair.IsCompressedPoint ? "Compressed" : "Uncompressed";
+                    // Prefer the real public key; the object's own flag isn't set for every kind
+                    // of encrypted key (e.g. ones created from an intermediate code).
+                    bool compressed = EncryptedKeyPair.IsPublicKeyAvailable()
+                        ? EncryptedKeyPair.GetPublicKey().IsCompressedPoint
+                        : EncryptedKeyPair.IsCompressedPoint;
+                    kind = compressed ? "Compressed" : "Uncompressed";
                     if (EncryptedKeyPair.IsAddressAvailable()) version = EncryptedKeyPair.GetAddress().AddressType;
                 } else {
                     return "Unknown";

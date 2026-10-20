@@ -29,6 +29,8 @@ See [SECURITY.md](SECURITY.md) and [CHANGES.md](CHANGES.md) for the full list an
 **Small additions (new, not present upstream):**
 - Two new "Selection" menu export options: `Export Address,WIF (CSV)` and `Export Address,WIF,Hex (CSV)` — plain CSV, no extra formatting, for anyone doing bulk analysis. The existing `Save Address List` / `Save Address List with PrivKey` options are unchanged.
 - Addresses generated from the **Address Utility** window (`Tools → Address Utility`, both "Generate" and the mini-key/"Shacode" button) are now also added to the main window's list, matching what `Address → New address` already did. Previously they only appeared in Address Utility's own fields and were lost when you closed that window.
+- **Compressed addresses by default** for new random WIF keys, with an `Address → Compressed addresses` option to switch back to uncompressed (mini keys, BIP38 and deterministic keys keep their original formats). A **Format** column in the list shows `Compressed` / `Uncompressed`.
+- Fixes: odd-length hex input no longer silently decodes to a different private key, and BIP38 encryption now actually rejects an empty passphrase.
 - Removed the hardcoded, ~2013-era block-explorer links (blockexplorer.com, dot-bit.org, etc. — all dead or wrong today).
 
 No other functional/UI behavior was changed.

@@ -205,7 +205,7 @@ namespace BtcAddress.Forms {
                         newitem = new KeyCollectionItem(mkp);
                         break;
                     case GenChoices.WIF:
-                        KeyPair kp = KeyPair.Create(ExtraEntropy.GetEntropy());
+                        KeyPair kp = KeyPair.Create(ExtraEntropy.GetEntropy(), Program.UseCompressedAddresses);
                         s = kp.AddressBase58;
                         newitem = new KeyCollectionItem(kp);
                         break;

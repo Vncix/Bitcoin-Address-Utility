@@ -78,6 +78,27 @@ changed to `new SecureRandom(new CryptoApiRandomGenerator())`:
   48 litecoin). Works for plain, mini-key and BIP38 items. Address column narrowed so the
   three columns fit without a horizontal scrollbar.
 
+- **`Properties/Settings.cs` / `Program.cs` / `Forms/KeyCollectionView*` / `Forms/Form1.cs` /
+  `Forms/AddressGen.cs`** — new random WIF keys are now generated with **compressed public
+  keys by default**, with a per-user setting to go back: `Address → Compressed addresses`
+  (saved in the user's `user.config`; Address Utility's existing "Generate compressed public
+  keys" menu item shares the same setting). It applies to `Address → New address`,
+  `Generate addresses → Full-length (WIF)` and Address Utility's Generate button. Deliberately
+  **not** changed, to keep their original formats: mini keys and BIP38 / passphrase-encrypted
+  keys (still uncompressed), and deterministic keys (changing them would change the addresses
+  they reproduce).
+- **`Model/Bitcoin.cs`** — fixed `HexStringToBytes` for hex with an odd number of digits. The
+  lone digit used to be attached to the *end* ("ABC" decoded as `AB 0C`), so a private key
+  printed without its leading zero digit (63 digits instead of 64) silently decoded to a
+  completely different key and address. It now pads at the front ("ABC" is `0A BC`). Found via
+  the `odolvlobo` fork, which fixed the same bug.
+- **`Model/Bip38KeyPair.cs`** — the encryption constructor's passphrase check was
+  `passphrase == null && passphrase == ""`, which can never be true; it is now `||`, and the
+  null-key error message no longer says "Passphrase is required". Also found via `odolvlobo`.
+- **`Model/KeyCollectionItem.cs`** — the Format column now reads the real public key for BIP38
+  items, because the object's own compression flag isn't set for ones created from an
+  intermediate code.
+
 ## Documentation and reproducible evidence
 
 - **`SECURITY.md`** was substantially expanded with the full root-cause analysis (IL-level
