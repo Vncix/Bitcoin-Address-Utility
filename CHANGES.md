@@ -71,6 +71,13 @@ changed to `new SecureRandom(new CryptoApiRandomGenerator())`:
   with no other files. The two DLLs are now committed to the repo root (and no longer
   listed in `.gitignore`) so the project builds out of the box.
 
+- **`Forms/KeyCollectionView.cs` / `.Designer.cs` / `Model/KeyCollectionItem.cs`** — the main
+  list's "Balance" column (a hardcoded `"0.00"` that never showed real data) was replaced by
+  a **Format** column showing `Compressed` or `Uncompressed` (or `Address only` when no public
+  key is known), plus `, ver N` when the address version byte isn't 0 (e.g. 111 testnet,
+  48 litecoin). Works for plain, mini-key and BIP38 items. Address column narrowed so the
+  three columns fit without a horizontal scrollbar.
+
 ## Documentation and reproducible evidence
 
 - **`SECURITY.md`** was substantially expanded with the full root-cause analysis (IL-level

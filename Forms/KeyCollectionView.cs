@@ -46,7 +46,7 @@ namespace BtcAddress.Forms {
         }
 
         private void KeyCollectionView_Load(object sender, EventArgs e) {
-            listView1.Columns[0].Width = 400;
+            listView1.Columns[0].Width = 340;
             listView1.Columns[1].Width = 100;
             toolStripStatusLabel1.Text = "Click Address to generate some addresses.";
 
@@ -78,7 +78,7 @@ namespace BtcAddress.Forms {
 
         void KeyCollection_ItemsAdded(IEnumerable<KeyCollectionItem> obj) {
             foreach (var item in obj) {
-                ListViewItem lvi = new ListViewItem(new string[] { item.ToString(), item.PrivateKeyKind, "0.00" });
+                ListViewItem lvi = new ListViewItem(new string[] { item.ToString(), item.PrivateKeyKind, item.AddressFormat });
                 lvi.Tag = item;
                 lvi.Checked = true;
                 listView1.Items.Add(lvi);                
@@ -87,7 +87,7 @@ namespace BtcAddress.Forms {
         }
 
         void KeyCollection_ItemAdded(KeyCollectionItem item) {
-            ListViewItem lvi = new ListViewItem(new string[] { item.ToString(), item.PrivateKeyKind, "0.00" });
+            ListViewItem lvi = new ListViewItem(new string[] { item.ToString(), item.PrivateKeyKind, item.AddressFormat });
             lvi.Tag = item;
             lvi.Checked = true;
             listView1.Items.Add(lvi);

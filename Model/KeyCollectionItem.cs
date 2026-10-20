@@ -71,6 +71,30 @@ namespace Casascius.Bitcoin {
         }
 
         /// <summary>
+        /// Describes the address format: "Compressed" or "Uncompressed" public key, or
+        /// "Address only" when no public key is known. A non-zero address version byte
+        /// (e.g. 111 testnet, 48 litecoin) is appended as ", ver N".
+        /// </summary>
+        public string AddressFormat {
+            get {
+                string kind;
+                byte version = 0;
+                if (Address != null) {
+                    version = Address.AddressType;
+                    kind = (Address is PublicKey)
+                        ? (((PublicKey)Address).IsCompressedPoint ? "Compressed" : "Uncompressed")
+                        : "Address only";
+                } else if (EncryptedKeyPair != null) {
+                    kind = EncryptedKeyPair.IsCompressedPoint ? "Compressed" : "Uncompressed";
+                    if (EncryptedKeyPair.IsAddressAvailable()) version = EncryptedKeyPair.GetAddress().AddressType;
+                } else {
+                    return "Unknown";
+                }
+                return version == 0 ? kind : kind + ", ver " + version;
+            }
+        }
+
+        /// <summary>
         /// Returns "MiniKey", "Known", "Encrypted", or "Unknown" depending on what private key we have.
         /// </summary>
         public string PrivateKeyKind {

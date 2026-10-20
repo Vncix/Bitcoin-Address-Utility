@@ -62,7 +62,7 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.chAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chPrivateKey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chBalance = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chFormat = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -358,7 +358,7 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chAddress,
             this.chPrivateKey,
-            this.chBalance});
+            this.chFormat});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.Location = new System.Drawing.Point(0, 27);
             this.listView1.Name = "listView1";
@@ -372,16 +372,17 @@
             // chAddress
             // 
             this.chAddress.Text = "Address";
-            this.chAddress.Width = 480;
+            this.chAddress.Width = 340;
             // 
             // chPrivateKey
             // 
             this.chPrivateKey.Text = "Private Key";
             this.chPrivateKey.Width = 100;
             // 
-            // chBalance
+            // chFormat
             // 
-            this.chBalance.Text = "Balance";
+            this.chFormat.Text = "Format";
+            this.chFormat.Width = 130;
             // 
             // contextMenuStrip1
             // 
@@ -449,7 +450,7 @@
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader chAddress;
         private System.Windows.Forms.ColumnHeader chPrivateKey;
-        private System.Windows.Forms.ColumnHeader chBalance;
+        private System.Windows.Forms.ColumnHeader chFormat;
         private System.Windows.Forms.ToolStripMenuItem keyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newAddressToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateKeysToolStripMenuItem;
