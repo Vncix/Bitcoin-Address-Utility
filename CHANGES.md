@@ -52,6 +52,24 @@ changed to `new SecureRandom(new CryptoApiRandomGenerator())`:
   or pointing to the wrong service today) and hid the now-inert button
   (`btnBlockExplorer.Visible = false` in the constructor).
 
+- **`Forms/AddressGen.cs` / `.Designer.cs`** — fixed the pre-existing "Retain unencrypted
+  private key" checkbox, which was read into `RetainPrivateKeys` but never passed to
+  `new Bip38KeyPair(intermediate, ...)`, so it had no effect. Added a new opt-in checkbox,
+  **"Keep passphrase for export"** (shown with "Passphrase Encrypted", off by default).
+- **`Model/KeyCollectionItem.cs`** — new `RetainedPassphrase` field (null unless the box above
+  was checked).
+- **`Forms/KeyCollectionView.cs`** — if any selected item has a retained passphrase, both CSV
+  exports append it as an extra last column (CSV-quoted, empty for items without one). The
+  hex export now also fills the hex column for BIP38 items whose unencrypted key was retained.
+  **The passphrase is written in plain text next to the encrypted key** — anyone with that
+  file can decrypt; use only for your own analysis and protect the file accordingly.
+
+- **`BtcAddress.csproj` / `Program.cs`** — single-file builds: `BouncyCastle.Crypto.dll` and
+  `ThoughtWorks.QRCode.dll` are now also embedded in the exe as resources (only if present at
+  build time) and loaded through an `AssemblyResolve` handler in `Program`'s static
+  constructor when they aren't found next to the exe. The resulting `BtcAddress.exe` runs
+  with no other files. The DLLs are still required in the project root to build.
+
 ## Documentation and reproducible evidence
 
 - **`SECURITY.md`** was substantially expanded with the full root-cause analysis (IL-level

@@ -383,6 +383,12 @@ namespace BtcAddress.Forms {
             }
         }
 
+        private static string CsvField(string value) {
+            if (value == null) return "";
+            if (value.IndexOfAny(new char[] { ',', '"', '\r', '\n' }) < 0) return value;
+            return "\"" + value.Replace("\"", "\"\"") + "\"";
+        }
+
         private void exportPlainTextToolStripMenuItem_Click(object sender, EventArgs e) {
             List<KeyCollectionItem> selected = new List<KeyCollectionItem>();
             foreach (ListViewItem lvi in listView1.Items) {
@@ -399,8 +405,11 @@ namespace BtcAddress.Forms {
                 if (DialogResult.OK == saveFileDialog1.ShowDialog()) {
                     if (saveFileDialog1.FileName != "") {
                         using (StreamWriter w = File.CreateText(saveFileDialog1.FileName)) {
+                            bool withPassphrase = selected.Any(k => k.RetainedPassphrase != null);
                             foreach (var k in selected) {
-                                w.WriteLine(k.GetAddressBase58() + "," + k.PrivateKey);
+                                string line = k.GetAddressBase58() + "," + k.PrivateKey;
+                                if (withPassphrase) line += "," + CsvField(k.RetainedPassphrase);
+                                w.WriteLine(line);
                             }
                             w.Close();
                         }
@@ -427,9 +436,17 @@ namespace BtcAddress.Forms {
                 if (DialogResult.OK == saveFileDialog1.ShowDialog()) {
                     if (saveFileDialog1.FileName != "") {
                         using (StreamWriter w = File.CreateText(saveFileDialog1.FileName)) {
+                            bool withPassphrase = selected.Any(k => k.RetainedPassphrase != null);
                             foreach (var k in selected) {
-                                string hex = (k.Address != null && k.Address is KeyPair) ? ((KeyPair)k.Address).PrivateKeyHex.Replace(" ", "") : "";
-                                w.WriteLine(k.GetAddressBase58() + "," + k.PrivateKey + "," + hex);
+                                string hex = "";
+                                if (k.Address != null && k.Address is KeyPair) {
+                                    hex = ((KeyPair)k.Address).PrivateKeyHex.Replace(" ", "");
+                                } else if (k.EncryptedKeyPair != null && k.EncryptedKeyPair.IsUnencryptedPrivateKeyAvailable()) {
+                                    hex = k.EncryptedKeyPair.GetUnencryptedPrivateKey().PrivateKeyHex.Replace(" ", "");
+                                }
+                                string line = k.GetAddressBase58() + "," + k.PrivateKey + "," + hex;
+                                if (withPassphrase) line += "," + CsvField(k.RetainedPassphrase);
+                                w.WriteLine(line);
                             }
                             w.Close();
                         }

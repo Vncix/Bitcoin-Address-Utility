@@ -48,6 +48,8 @@ namespace BtcAddress.Forms {
 
         private bool RetainPrivateKeys = false;
 
+        private bool RetainPassphrase = false;
+
         private string UserText;
 
         private int RemainingToGenerate = 0;
@@ -77,6 +79,7 @@ namespace BtcAddress.Forms {
                 }
             }
             chkRetainPrivKey.Visible = (rdoEncrypted.Checked);
+            chkRetainPassphrase.Visible = (rdoEncrypted.Checked);
         }
 
         private void AddressGen_FormClosing(object sender, FormClosingEventArgs e) {
@@ -138,6 +141,7 @@ namespace BtcAddress.Forms {
             RemainingToGenerate = (int)numGenCount.Value;
             UserText = txtTextInput.Text;
             RetainPrivateKeys = chkRetainPrivKey.Checked;
+            RetainPassphrase = chkRetainPassphrase.Checked && rdoEncrypted.Checked;
 
             if (rdoDeterministicWallet.Checked) GenChoice = GenChoices.Deterministic;
             if (rdoEncrypted.Checked) {
@@ -212,8 +216,9 @@ namespace BtcAddress.Forms {
                         newitem = new KeyCollectionItem(kp);
                         break;
                     case GenChoices.Encrypted:
-                        Bip38KeyPair ekp = new Bip38KeyPair(intermediate);
+                        Bip38KeyPair ekp = new Bip38KeyPair(intermediate, RetainPrivateKeys);
                         newitem = new KeyCollectionItem(ekp);
+                        if (RetainPassphrase) newitem.RetainedPassphrase = UserText;
                         break;
                     case GenChoices.TwoFactor:
                         ekp = new Bip38KeyPair(intermediatesForGeneration[intermediateIdx++]);

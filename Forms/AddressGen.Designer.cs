@@ -40,6 +40,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.chkRetainPrivKey = new System.Windows.Forms.CheckBox();
+            this.chkRetainPassphrase = new System.Windows.Forms.CheckBox();
             this.rdoTwoFactor = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.numGenCount)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -204,7 +205,18 @@
             this.chkRetainPrivKey.Text = "Retain unencrypted private key";
             this.chkRetainPrivKey.UseVisualStyleBackColor = true;
             this.chkRetainPrivKey.Visible = false;
-            // 
+            //
+            // chkRetainPassphrase
+            //
+            this.chkRetainPassphrase.AutoSize = true;
+            this.chkRetainPassphrase.Location = new System.Drawing.Point(8, 85);
+            this.chkRetainPassphrase.Name = "chkRetainPassphrase";
+            this.chkRetainPassphrase.Size = new System.Drawing.Size(150, 17);
+            this.chkRetainPassphrase.TabIndex = 15;
+            this.chkRetainPassphrase.Text = "Keep passphrase for export";
+            this.chkRetainPassphrase.UseVisualStyleBackColor = true;
+            this.chkRetainPassphrase.Visible = false;
+            //
             // rdoTwoFactor
             // 
             this.rdoTwoFactor.AutoSize = true;
@@ -221,6 +233,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 254);
+            this.Controls.Add(this.chkRetainPassphrase);
             this.Controls.Add(this.chkRetainPrivKey);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
@@ -260,6 +273,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.CheckBox chkRetainPrivKey;
+        private System.Windows.Forms.CheckBox chkRetainPassphrase;
         private System.Windows.Forms.RadioButton rdoTwoFactor;
     }
 }

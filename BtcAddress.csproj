@@ -185,6 +185,12 @@
     <Compile Include="Reports\CoinInsert.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="BouncyCastle.Crypto.dll" Condition="Exists('BouncyCastle.Crypto.dll')">
+      <LogicalName>BouncyCastle.Crypto.dll</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ThoughtWorks.QRCode.dll" Condition="Exists('ThoughtWorks.QRCode.dll')">
+      <LogicalName>ThoughtWorks.QRCode.dll</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddressGen.resx">
       <DependentUpon>AddressGen.cs</DependentUpon>
     </EmbeddedResource>

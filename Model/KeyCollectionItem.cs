@@ -42,6 +42,13 @@ namespace Casascius.Bitcoin {
         public AddressBase Address;
 
         /// <summary>
+        /// The BIP38 passphrase, kept in plain text only if the user explicitly asked to retain
+        /// it for export ("Keep passphrase for export" in the Generate Addresses window).
+        /// Null otherwise.
+        /// </summary>
+        public string RetainedPassphrase;
+
+        /// <summary>
         /// Gets the address in Base58, calculating it if necessary.
         /// </summary>
         public string GetAddressBase58() {

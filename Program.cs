@@ -23,6 +23,22 @@ using System.Windows.Forms;
 namespace BtcAddress {
     static class Program {
 
+        // Single-file builds: BouncyCastle.Crypto.dll and ThoughtWorks.QRCode.dll are embedded as
+        // resources (see BtcAddress.csproj) and loaded from here if not found next to the exe.
+        // Runs before Main, so before any type from those assemblies is needed.
+        static Program() {
+            AppDomain.CurrentDomain.AssemblyResolve += delegate(object sender, ResolveEventArgs args) {
+                string name = new System.Reflection.AssemblyName(args.Name).Name + ".dll";
+                using (System.IO.Stream s = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(name)) {
+                    if (s == null) return null;
+                    byte[] data = new byte[s.Length];
+                    int read = 0;
+                    while (read < data.Length) read += s.Read(data, read, data.Length - read);
+                    return System.Reflection.Assembly.Load(data);
+                }
+            };
+        }
+
         public static BtcAddress.Forms.KeyCollectionView MainWindow = null;
 
         public static Form1 AddressUtility = null;
